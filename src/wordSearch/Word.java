@@ -63,6 +63,6 @@ public class Word {
 	}
 	
 	public String toString() {
-		return word + ": " + direction;
+		return word + " at " + "(" + xCoord + "," + yCoord + ")";
 	}
 }
