@@ -1,4 +1,5 @@
 package wordSearch;
+//package com.gradescope.wordsearch;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -56,7 +57,7 @@ public class WordGrid {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				if (grid.get(i).get(j).equals(' ')) {
-					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'a'));
+					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'A'));
 				}
 			}
 		}
@@ -74,7 +75,7 @@ public class WordGrid {
 	private void addWords(Word word) {
 		// find a valid space
 		generateCoordinates(word);
-		System.out.println(word.toString()); // for debug. remove before final
+		//System.out.println(word.toString()); // for debug. remove before final
 		// horizontal
 		if (word.getDirection().equals("horizontal")) {
 			for (int i = 0; i < word.getWord().length(); i++) {
@@ -97,10 +98,9 @@ public class WordGrid {
 	
 	// checks if word's coordinates are valid
 	public boolean isValidPosition(Word word) {
+		if (word.getXCoord() == -1 || word.getYCoord() == -1) return false;
 		// checks horizontal words. comments for this branch apply for all three
 		if (word.getDirection().equals("horizontal")) {
-			// checks if not enough space to put word there
-			if (word.getXCoord() > (width - word.getWord().length())) return false;
 			// makes sure it doesn't clash with other words
 			for (int i = 0; i < word.getWord().length(); i++) {
 				if (grid.get(word.getYCoord()).get(word.getXCoord() + i) != ' '	&& 
@@ -109,7 +109,6 @@ public class WordGrid {
 		}
 		// checks vertical words
 		if (word.getDirection().equals("vertical")) {
-			if (word.getYCoord() > (height - word.getWord().length())) return false;
 			for (int i = 0; i < word.getWord().length(); i++) {
 				if (grid.get(word.getYCoord() + i).get(word.getXCoord()) != ' '	&& 
 						grid.get(word.getYCoord() + i).get(word.getXCoord()) != word.getWord().charAt(i)) return false;
@@ -117,7 +116,6 @@ public class WordGrid {
 		}
 		// checks diagonals
 		if (word.getDirection().equals("diagonal")) {
-			if (word.getXCoord() > (width - word.getWord().length()) || word.getYCoord() > (height - word.getWord().length())) return false;
 			for (int i = 0; i < word.getWord().length(); i++) {
 				if (grid.get(word.getYCoord() + i).get(word.getXCoord() + i) != ' '	&& 
 						grid.get(word.getYCoord() + i).get(word.getXCoord() + i) != word.getWord().charAt(i)) return false;
@@ -129,18 +127,29 @@ public class WordGrid {
 	 // generates random coordinates until it finds one that is valid
 	private void generateCoordinates(Word word) {
 		Random random = new Random();
-		// set initial random coordinates
-		word.setPosition(random.nextInt(width), random.nextInt(height));
-
 		while (!isValidPosition(word)) {
 			// keeps setting random coordinates until it finds a valid one
-			word.setPosition(random.nextInt(width), random.nextInt(height));
+			if (word.getDirection().equals("horizontal")) {
+				word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height));
+			}
+			if (word.getDirection().equals("vertical")) {
+				word.setPosition(random.nextInt(width), random.nextInt(height - word.getWord().length()));
+			}
+			if (word.getDirection().equals("diagonal")) {
+				word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height - word.getWord().length()));
+			}
 		}
 	}
 	
-	public void printBoard() {
+	public String toString() {
+		String board = "";
 		for (int i = 0; i < height; i++) {
-			System.out.println(grid.get(i));
+			board += grid.get(i).get(0);
+			for (int j = 1; j < width; j++) {
+				board += " " + grid.get(i).get(j);
+			}
+			board += "\n";
 		}
+		return board;
 	}
 }

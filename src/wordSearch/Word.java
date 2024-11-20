@@ -1,4 +1,5 @@
 package wordSearch;
+//package com.gradescope.wordsearch;
 
 import java.util.Random;
 
@@ -6,11 +7,11 @@ public class Word {
 	private String direction;
 	private String word;
 	
-	private int xCoord;
-	private int yCoord;
+	private int xCoord = -1;
+	private int yCoord = -1;
 	
 	public Word(String word) {
-		this.word = word;
+		this.word = word.toUpperCase();
 		setDirection();
 	}
 	
