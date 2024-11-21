@@ -1,5 +1,4 @@
-package wordSearch;
-//package com.gradescope.wordsearch;
+package com.gradescope.wordsearch;
 
 import java.util.ArrayList;
 import java.io.File;
@@ -7,42 +6,35 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.Random;
 
+/*
+ * Preston Greenwood
+ * CSC 210 Fall 2024
+ * 
+ * This class is a word grid. It has a 2d array of
+ * characters and a list of words. The dimensions 
+ * are arguments in the constructor and the words
+ * that are to be added are added by calling the
+ * addWord() method with a Word object as an
+ * argument. The words are placed in the grid with
+ * the placeWords() method 
+ */
 
 public class WordGrid {
 	
-	public ArrayList<Word> wordList = new ArrayList<Word>();
-	public static ArrayList<ArrayList<Character>> grid = new ArrayList<ArrayList<Character>>();
-	private static int height;
-	private static int width;
+	private ArrayList<Word> wordList = new ArrayList<Word>();
+	private ArrayList<ArrayList<Character>> grid = new ArrayList<ArrayList<Character>>();
+	private int height;
+	private int width;
 	
 	
-	public WordGrid(String fileName) throws FileNotFoundException {
-
-		File inputFile = new File(fileName);
-		Scanner fileScanner = new Scanner(inputFile);
-		
-		// get dimensions and fill empty array
-		height = fileScanner.nextInt();
-		width = fileScanner.nextInt();
-		fillEmptyArray();
-		
-		// get words from file
-		String currentLine = fileScanner.nextLine();
-		while (fileScanner.hasNextLine()) {
-			currentLine = fileScanner.nextLine();
-			wordList.add(new Word(currentLine));
-		}
-		
-		fileScanner.close();
-		for (Word word : wordList) {
-			addWords(word);
-		}
-		// fill empty spaces with random letters
-		fillRandomLetters();
+	public WordGrid(int width, int height) throws FileNotFoundException {
+		this.height = height;
+		this.width = width;
+		fillEmptyArray();	
 	}
 	
 	// fills grid with empty chars to correct dimensions
-	private static void fillEmptyArray() {
+	private void fillEmptyArray() {
 		for (int i = 0; i < height; i++) {
 			grid.add(new ArrayList<Character>());
 			for (int j = 0; j < width; j++) {
@@ -51,28 +43,33 @@ public class WordGrid {
 		}
 	}
 	
+	// adds a word to the word list
+	public void addWord(String wordString) {
+		wordList.add(new Word(wordString));
+	}
+	
+	// puts all of the words in wordList into the grid
+	public void placeWords() {
+		for (Word word : wordList) {
+			copyWordsToGrid(word);
+		}
+		fillRandomLetters();
+	}
+	
 	// puts random letters in all empty spaces
-	private static void fillRandomLetters() {
+	private void fillRandomLetters() {
 		Random randomLetter = new Random();
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				if (grid.get(i).get(j).equals(' ')) {
-					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'A'));
+					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'a'));
 				}
 			}
 		}
 	}
 	
-	public static int getHeight() {
-		return height;
-	}
-	
-	public static int getWidth() {
-		return width;
-	}
-	
 	// copies the letters from the words into the grid
-	private void addWords(Word word) {
+	private void copyWordsToGrid(Word word) {
 		// find a valid space
 		generateCoordinates(word);
 		//System.out.println(word.toString()); // for debug. remove before final
@@ -130,15 +127,26 @@ public class WordGrid {
 		while (!isValidPosition(word)) {
 			// keeps setting random coordinates until it finds a valid one
 			if (word.getDirection().equals("horizontal")) {
-				word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height));
+				if (width - word.getWord().length() == 0) word.setPosition(0,random.nextInt(height));
+				else word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height));
 			}
 			if (word.getDirection().equals("vertical")) {
-				word.setPosition(random.nextInt(width), random.nextInt(height - word.getWord().length()));
+				if (height - word.getWord().length() == 0) word.setPosition(random.nextInt(width),0);
+				else word.setPosition(random.nextInt(width), random.nextInt(height - word.getWord().length()));
 			}
 			if (word.getDirection().equals("diagonal")) {
-				word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height - word.getWord().length()));
+				if (height - word.getWord().length() == 0 || width - word.getWord().length() == 0) word.setPosition(0,0);
+				else word.setPosition(random.nextInt(width - word.getWord().length()), random.nextInt(height - word.getWord().length()));
 			}
 		}
+	}
+	
+	public int getWidth() {
+		return width;
+	}
+	
+	public int getHeight() {
+		return height;
 	}
 	
 	public String toString() {

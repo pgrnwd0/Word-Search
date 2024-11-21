@@ -1,8 +1,18 @@
-package wordSearch;
-//package com.gradescope.wordsearch;
+package com.gradescope.wordsearch;
 
 import java.util.Random;
 
+/*
+ * Preston Greenwood
+ * CSC210 Fall 2024
+ * 
+ * This class is a Word. It has a string representing
+ * the word and a direction denoting how it is placed
+ * in a WordGrid. It also stores the word's coordinates
+ * in a WordGrid. The X and Y coordinates need to be set
+ * prior to adding them to a grid because they are by
+ * default set to -1.
+ */
 public class Word {
 	private String direction;
 	private String word;
@@ -15,6 +25,7 @@ public class Word {
 		setDirection();
 	}
 	
+	// picks a random orientation
 	private void setDirection() {
 		Random random = new Random();
 		// generate number from 0 to 2
