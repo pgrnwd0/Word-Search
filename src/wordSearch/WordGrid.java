@@ -62,7 +62,7 @@ public class WordGrid {
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				if (grid.get(i).get(j).equals(' ')) {
-					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'a'));
+					grid.get(i).set(j, (char)(randomLetter.nextInt(26) + 'A'));
 				}
 			}
 		}
@@ -150,8 +150,17 @@ public class WordGrid {
 	}
 	
 	public String toString() {
-		String board = "";
+		String board = "   ";
+		for (int j = 0; j < width; j++) {
+			board += (char)(j + 'a');
+			board += ' ';
+		}
+		board += "\n";
 		for (int i = 0; i < height; i++) {
+			if (i < 10) {
+				board += "0" + String.valueOf(i) + " ";
+			}
+			else board += String.valueOf(i) + " ";
 			board += grid.get(i).get(0);
 			for (int j = 1; j < width; j++) {
 				board += " " + grid.get(i).get(j);
