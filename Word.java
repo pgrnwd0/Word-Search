@@ -1,13 +1,24 @@
-//package wordSearch;
 package com.gradescope.wordsearch;
 
 import java.util.Random;
+import java.util.HashSet;
+/*
+ * Preston Greenwood
+ * CSC210 Fall 2024
+ * 
+ * This class is a Word. It has a string representing
+ * the word and a direction denoting how it is placed
+ * in a WordGrid. It also stores the word's coordinates
+ * in a WordGrid. The X and Y coordinates need to be set
+ * prior to adding them to a grid because they are by
+ * default set to -1.
+ */
 
 public class Word {
 	private String direction;
 	private String word;
+	private HashSet<String> coordinates = new HashSet<String>();
 	
-	private boolean staticDirection = false;
 	private int xCoord = -1;
 	private int yCoord = -1;
 	
@@ -16,6 +27,7 @@ public class Word {
 		setDirection();
 	}
 	
+	// picks a random orientation
 	private void setDirection() {
 		Random random = new Random();
 		// generate number from 0 to 2
@@ -37,15 +49,6 @@ public class Word {
 	
 	public void setWord(String word) {
 		this.word = word;
-	}
-	
-	public void setStaticDirection() {
-		if (!staticDirection) staticDirection = true;
-		else staticDirection = false;
-	}
-	
-	public boolean isStatic() {
-		return staticDirection;
 	}
 	
 	public void setPosition(int x, int y) {
@@ -75,5 +78,13 @@ public class Word {
 	
 	public String toString() {
 		return word + " at " + "(" + xCoord + "," + yCoord + ")";
+	}
+	
+	public void addToSet(String coords) {
+		coordinates.add(coords);
+	}
+	
+	public HashSet<String> getCoordinateSet(){
+		return coordinates;
 	}
 }

@@ -16,8 +16,10 @@ public class FindWords {
 	}
 	
 	public static boolean dimensionsMatch(int width, int height, ArrayList<String> grid) {
+		System.out.println(grid.size() + " " + height);
 		if (grid.size() != height) return false;
 		for (String s : grid) {
+			System.out.println(s.split(" ").length + " " + width);
 			if (s.split(" ").length != width) return false;
 		}
 		return true;
@@ -75,6 +77,8 @@ public class FindWords {
 			if (findVertical(w, grid)) found.add(w);
 			if (findDiagonal(w, grid)) found.add(w);
 		}
+		System.out.println(words);
+		System.out.println(found);
 		if (found.size() == words.size()) return true;
 		return false;
 	}
